@@ -37,9 +37,9 @@ class HelpwaController extends BaseController
     }
 
     public function replyMessage($request, $ticket_number){
-        $phone_number = explode("@", $request->phone_number);
-        $msg = "Bpk/Ibu ".$request->push_name." , Ticket terbuat dengan nomor : #".$ticket_number;
-        $response = Http::post(config('helpwa.sendWa'), [
+        $phone_number = explode("@", $request['phone_number']);
+        $msg = "Bpk/Ibu ".$request['push_name']." , Ticket terbuat dengan nomor : #".$ticket_number;
+        $response = Http::post(config('helpwa.sendwa'), [
             'text' => $msg,
             'to' => $phone_number[0],
         ]);
