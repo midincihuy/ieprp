@@ -11,19 +11,20 @@ use App\Models\Ticket;
 class HelpwaController extends BaseController
 {
     public function index(Request $request){
-        // return $request->all();
+        \Log::info($request->all());
         // Check phone number and status Open ticket exist
 
-        $check = Ticket::where(['phone_number' => $request->phone_number, 'status' => 'Open'])->get();
+        $phone_number = explode("@", $request->phone_number);
+        $check = Ticket::where(['phone_number' => $phone_number[0], 'status' => 'Open'])->get();
 
         if($check->count() > 0){
             // Kalau ada tidak usah reply message
-            return "ada ".$request->phone_number;
+            return "ada ".$phone_number[0];
         }else{
             // kalau tidak ada reply message dan insert ticket
-            $msg = $this->replyMessage($request->all());
-            $ticket_number = $this->generateTicket($request->phone_number);
-            return "tidak ada ".$request->phone_number." generate ticket : ".$this->generateTicket($request->phone_number)." with msg ".$msg;
+            $ticket_number = $this->generateTicket($phone_number[0]);
+            $msg = $this->replyMessage($request->all(), $ticket_number);
+            return "tidak ada ".$phone_number[0]." generate ticket : ".$ticket_number." with msg ".$msg;
         }
     }
 
@@ -35,19 +36,13 @@ class HelpwaController extends BaseController
         return $hasil;
     }
 
-    public function replyMessage($data){
-        $msg = "Mohon maaf ya, ".$data['push_name'];
-        $response = Http::post('http://172.17.108.23:8100/sendMsg', [
+    public function replyMessage($request, $ticket_number){
+        $phone_number = explode("@", $request->phone_number);
+        $msg = "Bpk/Ibu ".$request->push_name." , Ticket terbuat dengan nomor : #".$ticket_number;
+        $response = Http::post(config('helpwa.sendWa'), [
             'text' => $msg,
-            'to' => $data['phone_number'],
+            'to' => $phone_number[0],
         ]);
         return $msg;
-
-        /*
-$response = Http::post('http://172.17.108.23:8100/sendMsg', [
-    'text' => $msg,
-    'to' => $data['phone_number'],
-]);
-        */
     }
 }
