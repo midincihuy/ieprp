@@ -21,6 +21,7 @@ return new class extends Migration
             $table->datetime('end_time')->nullable();
             $table->string('status')->default('Open'); // Open / Close
             $table->string('pic')->nullable();
+            $table->datetime('pic_time')->nullable();
             $table->string('rate')->nullable(); // 1,2,3,4,5
             $table->timestamps();
         });

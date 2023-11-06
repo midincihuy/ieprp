@@ -18,6 +18,7 @@ class Ticket extends Model
         'end_time',
         'status', // Open / Close
         'pic',
+        'pic_time',
         'rate',
     ];
 }

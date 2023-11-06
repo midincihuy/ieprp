@@ -104,6 +104,7 @@ class HelpwaController extends BaseController
                         $arr_pic = explode("PIC#", $request->message);
                         $pic = $arr_pic[1];
                         $update->pic = $pic;
+                        $update->pic_time = date("Y-m-d H:i:s");
                         $update->save();
                         break;
                         
