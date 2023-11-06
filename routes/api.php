@@ -23,4 +23,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::middleware('auth:sanctum')->group( function () {
     Route::resource('tickets', TicketController::class);
     Route::post('helpwa', [HelpwaController::class, 'index']);
+    Route::post('helpwaresp', [HelpwaController::class, 'response']);
+    Route::post('helpwarate', [HelpwaController::class, 'rate']);
 });

@@ -13,9 +13,12 @@ class Ticket extends Model
         'msg_id', // From wa baileys
         'ticket_number',
         'phone_number',
+        'push_name',
         'start_time',
         'end_time',
         'status', // Open / Close
         'pic',
+        'rate',
     ];
 }
+
