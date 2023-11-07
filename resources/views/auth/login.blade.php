@@ -13,7 +13,7 @@
 	<link rel="shortcut icon" href="{{ asset('admin/img/icons/icon-48x48.png')}}" />
 
 
-	<title>Sign In | AdminKit Demo</title>
+	<title>Sign In | Helpdesk WA</title>
 
 	<link href="{{ asset('admin/css/app.css')}}" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">

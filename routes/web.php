@@ -19,4 +19,18 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', function () {
+    return redirect('admin/home');
+});
+
+Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], function () {
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    
+    Route::resource('user', App\Http\Controllers\Admin\UserController::class);
+    Route::resource('ticket', App\Http\Controllers\Admin\TicketController::class);
+    Route::resource('configuration', App\Http\Controllers\Admin\ConfigurationController::class);
+
+    Route::get('maps', function(){
+        return view('admin.maps.index');
+    })->name('maps');
+});
