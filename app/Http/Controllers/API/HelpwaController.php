@@ -32,7 +32,7 @@ class HelpwaController extends BaseController
                             "msg_id" => $request->msg_id,
                             "phone_number" => $phone_number[0],
                             "ticket_number" => $ticket_number,
-                            "start_time" => gmdate("Y-m-d H:i:s", $request->start_time),
+                            "start_time" => date("Y-m-d H:i:s", $request->start_time),
                             "push_name" => $request->push_name,
                         ];
                         $insert_ticket->fill($data_ticket);
@@ -115,7 +115,7 @@ class HelpwaController extends BaseController
                 switch($keyword){
                     case "end" :
                         $update = $check->first();
-                        $update->end_time = gmdate("Y-m-d H:i:s", $request->end_time);
+                        $update->end_time = date("Y-m-d H:i:s", $request->end_time);
                         $update->status = "Close";
                         $update->save();
                         break;  
