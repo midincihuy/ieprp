@@ -32,7 +32,7 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
-        return (new TicketsExport($request->start_periode." 00:00:00", $request->end_periode."23:59:59"));
+        return (new TicketsExport($request->start_periode." 00:00:00", $request->end_periode." 23:59:59"));
     }
 
     /**

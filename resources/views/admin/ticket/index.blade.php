@@ -17,7 +17,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">End Periode</label>
-                        <input class="form-control form-control-lg" type="date" name="start_periode" placeholder="End Periode" />
+                        <input class="form-control form-control-lg" type="date" name="end_periode" placeholder="End Periode" />
                     </div>
                     <input type="submit" name="submit" value="Export">
                     </form>
