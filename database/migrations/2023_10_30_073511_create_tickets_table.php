@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('pic')->nullable();
             $table->datetime('pic_time')->nullable();
             $table->string('rate')->nullable(); // 1,2,3,4,5
+            $table->string('category')->nullable(); // 
             $table->timestamps();
         });
     }

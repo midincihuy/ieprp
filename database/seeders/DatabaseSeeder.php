@@ -78,6 +78,25 @@ class DatabaseSeeder extends Seeder
                 'value' => 'Tidak Baik',
                 'sort' => 5
             ],
+            
+            [
+                'code' => 'CATEGORY', 
+                'item' => 'Pilih Category Layanan',
+                'value' => 'Instalasi',
+                'sort' => 1
+            ],
+            [
+                'code' => 'CATEGORY', 
+                'item' => 'Pilih Category Layanan',
+                'value' => 'Reset Password',
+                'sort' => 2
+            ],
+            [
+                'code' => 'CATEGORY', 
+                'item' => 'Pilih Category Layanan',
+                'value' => 'Jaringan',
+                'sort' => 3
+            ],
         ];
 
         foreach($reference as $ref ){

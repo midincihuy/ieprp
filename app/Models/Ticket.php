@@ -20,6 +20,7 @@ class Ticket extends Model
         'pic',
         'pic_time',
         'rate',
+        'category',
     ];
 }
 
