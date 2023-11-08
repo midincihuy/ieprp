@@ -37,7 +37,7 @@ class TicketsExport implements FromQuery, Responsable, WithHeadings, ShouldAutoS
             'Push Name',
             'Start Time',
             'End Time',
-            'Duration (Minutes)',
+            'Duration (Seconds)',
             'Status', // Open / Close
             'PIC',
             'PIC Assign Time',
@@ -52,7 +52,7 @@ class TicketsExport implements FromQuery, Responsable, WithHeadings, ShouldAutoS
     {
         $start_time = Carbon::parse($ticket->start_time);
         $end_time = Carbon::parse($ticket->end_time);
-        $duration = $start_time->diffInMinutes($end_time);
+        $duration = $start_time->diffInSeconds($end_time);
         return [
             $ticket->msg_id,
             $ticket->ticket_number,
@@ -74,8 +74,9 @@ class TicketsExport implements FromQuery, Responsable, WithHeadings, ShouldAutoS
     public function columnFormats(): array
     {
         return [
-            'L' => NumberFormat::FORMAT_DATE_DATETIME,
+            'G' => NumberFormat::FORMAT_DATE_TIME4,
             'M' => NumberFormat::FORMAT_DATE_DATETIME,
+            'N' => NumberFormat::FORMAT_DATE_DATETIME,
         ];
     }
 }
