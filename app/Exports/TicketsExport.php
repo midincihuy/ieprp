@@ -12,6 +12,7 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
+use Carbon\Carbon;
 class TicketsExport implements FromQuery, Responsable, WithHeadings, ShouldAutoSize, withMapping, WithColumnFormatting
 {
     use Exportable;
@@ -36,6 +37,7 @@ class TicketsExport implements FromQuery, Responsable, WithHeadings, ShouldAutoS
             'Push Name',
             'Start Time',
             'End Time',
+            'Duration (Minutes)',
             'Status', // Open / Close
             'PIC',
             'PIC Assign Time',
@@ -48,6 +50,9 @@ class TicketsExport implements FromQuery, Responsable, WithHeadings, ShouldAutoS
 
     public function map($ticket): array
     {
+        $start_time = Carbon::parse($ticket->start_time);
+        $end_time = Carbon::parse($ticket->end_time);
+        $duration = $start_time->diffInMinutes($end_time);
         return [
             $ticket->msg_id,
             $ticket->ticket_number,
@@ -55,6 +60,7 @@ class TicketsExport implements FromQuery, Responsable, WithHeadings, ShouldAutoS
             $ticket->push_name,
             $ticket->start_time,
             $ticket->end_time,
+            $duration,
             $ticket->status,
             $ticket->pic,
             $ticket->pic_time,
