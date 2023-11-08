@@ -60,16 +60,16 @@ class TicketsExport implements FromQuery, Responsable, WithHeadings, ShouldAutoS
             $ticket->pic_time,
             $ticket->rate,
             $ticket->category,
-            Date::dateTimeToExcel($ticket->created_at),
-            Date::dateTimeToExcel($ticket->updated_at),
+            $ticket->created_at,
+            $ticket->updated_at,
         ];
     }
 
     public function columnFormats(): array
     {
         return [
-            'L' => NumberFormat::FORMAT_DATE,
-            'M' => NumberFormat::FORMAT_DATE,
+            'L' => NumberFormat::FORMAT_DATE_DATETIME,
+            'M' => NumberFormat::FORMAT_DATE_DATETIME,
         ];
     }
 }
