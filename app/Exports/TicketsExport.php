@@ -52,7 +52,10 @@ class TicketsExport implements FromQuery, Responsable, WithHeadings, ShouldAutoS
     {
         $start_time = Carbon::parse($ticket->start_time);
         $end_time = Carbon::parse($ticket->end_time);
-        $duration = $start_time->diffInSeconds($end_time);
+        $duration = "";
+        if(isset($ticket->end_time)){
+            $duration = gmdate("H:i:s", $start_time->diffInSeconds($end_time));
+        }
         return [
             $ticket->msg_id,
             $ticket->ticket_number,
