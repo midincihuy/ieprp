@@ -37,7 +37,7 @@ class TicketsExport implements FromQuery, Responsable, WithHeadings, ShouldAutoS
             'Push Name',
             'Start Time',
             'End Time',
-            'Duration (Seconds)',
+            'Duration',
             'Status', // Open / Close
             'PIC',
             'PIC Assign Time',

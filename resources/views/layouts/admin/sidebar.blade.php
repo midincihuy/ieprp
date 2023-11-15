@@ -1,4 +1,4 @@
-<nav id="sidebar" class="sidebar js-sidebar">
+<nav id="sidebar" class="sidebar js-sidebar collapsed">
     <div class="sidebar-content js-simplebar">
         <a class="sidebar-brand" href="/home">
             <span class="align-middle">Helpdesk WA</span>

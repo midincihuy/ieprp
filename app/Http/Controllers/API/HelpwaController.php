@@ -122,7 +122,7 @@ class HelpwaController extends BaseController
                     
                     case "pic" :                
                         $update = $check->first();
-                        $arr_pic = explode("PIC#", $request->message);
+                        $arr_pic = explode($ref->first()->item, $request->message);
                         $pic = $arr_pic[1];
                         $update->pic = $pic;
                         $update->pic_time = date("Y-m-d H:i:s");

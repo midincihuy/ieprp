@@ -19,7 +19,7 @@
                         <label class="form-label">End Periode</label>
                         <input class="form-control form-control-lg" type="date" name="end_periode" placeholder="End Periode" />
                     </div>
-                    <input type="submit" name="submit" value="Export">
+                    <input class="btn btn-primary" type="submit" name="submit" value="Export">
                     </form>
                 </div>
             </div>
