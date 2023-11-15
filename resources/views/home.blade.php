@@ -173,6 +173,17 @@
             }
             colors.push(color+opacity);
         }
+        colors = [
+            '#4dc9f6'+opacity,
+            '#f67019'+opacity,
+            '#f53794'+opacity,
+            '#537bc4'+opacity,
+            '#acc236'+opacity,
+            '#166a8f'+opacity,
+            '#00a950'+opacity,
+            '#58595b'+opacity,
+            '#8549ba'+opacity
+        ];
         return colors;
     }
 
@@ -184,7 +195,7 @@
                 labels: data.labels,
                 datasets: [{
                     data: data.value,
-                    backgroundColor: getRandomColor(data.value.length,40),
+                    backgroundColor: getRandomColor(data.value.length,70),
                     borderWidth: 1
                 }]
             },
@@ -208,7 +219,7 @@
                 labels: data.labels,
                 datasets: [{
                     data: data.value,
-                    backgroundColor: getRandomColor(data.value.length,90),
+                    backgroundColor: getRandomColor(data.value.length,99),
                     borderWidth: 5
                 }]
             },
@@ -275,7 +286,7 @@
 					datasets: [{
 						label: "Slowest",
 						// backgroundColor: window.theme.primary,
-						borderColor: window.theme.primary,
+						borderColor: getRandomColor(1,99)[0],
 						// hoverBackgroundColor: window.theme.primary,
 						// hoverBorderColor: window.theme.primary,
 						data: data_slow,
@@ -283,7 +294,7 @@
                     {
 						label: "Fastest",
 						// backgroundColor: window.theme.primary,
-						borderColor: getRandomColor(1),
+						borderColor: getRandomColor(1,99)[1],
 						// hoverBackgroundColor: window.theme.primary,
 						// hoverBorderColor: window.theme.primary,
 						data: data_fast,

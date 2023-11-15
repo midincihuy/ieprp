@@ -69,8 +69,19 @@ class HomeController extends Controller
         $ticket_per_category  = [];
         // \Log::info($category_labels);
         $i = 0;
+        $colors = [
+            ['#4dc9f6'],
+            ['#f67019'],
+            ['#f53794'],
+            ['#537bc4'],
+            ['#acc236'],
+            ['#166a8f'],
+            ['#00a950'],
+            ['#58595b'],
+            ['#8549ba']
+        ];
         foreach($category_labels as $cat){
-            $color = $this->getRandomColor(1);
+            $color = $colors[$i];
             $ticket_per_category[$i]["label"] = $cat != null ? $cat : "Null";
             $ticket_per_category[$i]["fill"] = true;
             $ticket_per_category[$i]["backgroundColor"] = $color[0];
