@@ -219,7 +219,7 @@
                 labels: data.labels,
                 datasets: [{
                     data: data.value,
-                    backgroundColor: getRandomColor(data.value.length,99),
+                    backgroundColor: getRandomColor(data.value.length,""),
                     borderWidth: 5
                 }]
             },
@@ -286,7 +286,7 @@
 					datasets: [{
 						label: "Slowest",
 						// backgroundColor: window.theme.primary,
-						borderColor: getRandomColor(1,99)[0],
+						borderColor: getRandomColor(1,"")[0],
 						// hoverBackgroundColor: window.theme.primary,
 						// hoverBorderColor: window.theme.primary,
 						data: data_slow,
@@ -294,7 +294,7 @@
                     {
 						label: "Fastest",
 						// backgroundColor: window.theme.primary,
-						borderColor: getRandomColor(1,99)[1],
+						borderColor: getRandomColor(1,"")[1],
 						// hoverBackgroundColor: window.theme.primary,
 						// hoverBorderColor: window.theme.primary,
 						data: data_fast,

@@ -23,7 +23,13 @@ class HelpwaController extends BaseController
                     if($check->count() > 0){
                         // Kalau ada tidak usah reply message
                         \Log::info('sudah ada ticket dengan number : '.$check->first()->ticket_number);
-                        return "ada ".$phone_number[0];
+                        $reply = "";
+                        $ticket_number  = $check->first()->ticket_number;
+                        return response()->json([
+                            "message" => "ada ".$phone_number[0],
+                            "ticket_number" => $ticket_number,
+                            "reply" => $reply
+                        ]);
                     }else{
                         // kalau tidak ada reply message dan insert ticket
                         $ticket_number = $this->generateTicket($phone_number[0]);
@@ -37,15 +43,26 @@ class HelpwaController extends BaseController
                         ];
                         $insert_ticket->fill($data_ticket);
                         $insert_ticket->save();
-                        $msg = $this->replyMessage($request->all(), $ticket_number);
-                        $msg = $this->replyMessageWithCategory($request->all(), $ticket_number);
-                        return "tidak ada ".$phone_number[0]." generate ticket : ".$ticket_number." with msg ".$msg;
+                        // $msg = $this->replyMessage($request->all(), $ticket_number);
+                        // $this->replyMessageWithCategory($request->all(), $ticket_number);
+                        $reply = $this->replyMessageWithCategoryData($request->all(), $ticket_number);
+                        return response()->json([
+                            "message" => "tidak ada ".$phone_number[0]." generate ticket : ".$ticket_number." with msg ".json_encode($reply),
+                            "ticket_number" => $ticket_number,
+                            "reply" => $reply
+                        ]);
                     }
                     break;
                 default:
                     # code...
                     break;
             }
+        }else{
+            return response()->json([
+                "message" => "msg null",
+                "ticket_number" => "null",
+                "reply" => ""
+            ]);
         }
     }
 
@@ -77,6 +94,28 @@ class HelpwaController extends BaseController
         
     }
 
+    public function replyMessageWithCategoryData($request, $ticket_number){
+        $phone_number = explode("@", $request['phone_number']);
+        // $msg = "Bpk/Ibu ".$request['push_name']." , Ticket terbuat dengan nomor : #".$ticket_number;
+        $rating = Reference::where('code', 'CATEGORY')->get();
+        $response = "";
+        if($rating->count() > 0){
+            $poll_name = $ticket_number."|\n".$rating->first()->item;
+            $poll_values = $rating->pluck('value')->toArray();
+            $response = [
+                'message' => [
+                    'poll' => [
+                        'name' => $poll_name,
+                        "values" => $poll_values,
+                        "selectableCount" => 1
+                    ]
+                ],
+                'to' => $phone_number[0],
+            ];
+        }
+        return $response;        
+    }
+    
     public function replyMessageWithCategory($request, $ticket_number){
         $phone_number = explode("@", $request['phone_number']);
         // $msg = "Bpk/Ibu ".$request['push_name']." , Ticket terbuat dengan nomor : #".$ticket_number;
@@ -118,6 +157,11 @@ class HelpwaController extends BaseController
                         $update->end_time = date("Y-m-d H:i:s", $request->end_time);
                         $update->status = "Close";
                         $update->save();
+                        return response()->json([
+                            "message" => "Successfully End Ticket",
+                            "ticket_number" => $update->ticket_number,
+                            "reply" => ""
+                        ]);
                         break;  
                     
                     case "pic" :                
@@ -127,6 +171,11 @@ class HelpwaController extends BaseController
                         $update->pic = $pic;
                         $update->pic_time = date("Y-m-d H:i:s");
                         $update->save();
+                        return response()->json([
+                            "message" => "Successfully Set PIC Ticket",
+                            "ticket_number" => $update->ticket_number,
+                            "reply" => ""
+                        ]);
                         break;
                         
                     case "rate" :         
@@ -135,7 +184,7 @@ class HelpwaController extends BaseController
                         if($rating->count() > 0){
                             $poll_name = $check->first()->ticket_number."|\n".$rating->first()->item;
                             $poll_values = $rating->pluck('value')->toArray();
-                            $response = Http::post(config('helpwa.sendwa'), [
+                            $response = [
                                 'message' => [
                                     'poll' => [
                                         'name' => $poll_name,
@@ -144,17 +193,56 @@ class HelpwaController extends BaseController
                                     ]
                                 ],
                                 'to' => $phone_number[0],
+                            ];
+
+                            return response()->json([
+                                "message" => "Successfully Send Rate Polling",
+                                "ticket_number" => $check->first()->ticket_number,
+                                "reply" => $response
                             ]);
                         }
                         break;
                         
+                    case "cat" :         
+                        // Send Category Message
+                        $rating = Reference::where('code', 'CATEGORY')->get();
+                        if($rating->count() > 0){
+                            $poll_name = $check->first()->ticket_number."|\n".$rating->first()->item;
+                            $poll_values = $rating->pluck('value')->toArray();
+                            $response = [
+                                'message' => [
+                                    'poll' => [
+                                        'name' => $poll_name,
+                                        "values" => $poll_values,
+                                        "selectableCount" => 1
+                                    ]
+                                ],
+                                'to' => $phone_number[0],
+                            ];
+                            return response()->json([
+                                "message" => "Successfully Send Category Polling",
+                                "ticket_number" => $check->first()->ticket_number,
+                                "reply" => $response
+                            ]);
+                        }
+                        break;
                     default : 
                         \Log::info("NO Keyword detected, msg : ".json_encode($request->message));
+                        return response()->json([
+                            "message" => "msg null",
+                            "ticket_number" => "null",
+                            "reply" => ""
+                        ]);
                         break;
                 }
                 break;
             default:
                 # code...
+                return response()->json([
+                    "message" => "msg null",
+                    "ticket_number" => "null",
+                    "reply" => ""
+                ]);
                 break;
         }
     }
@@ -206,7 +294,14 @@ class HelpwaController extends BaseController
                     # code...
                     break;
             }
+        }else{
+            return response()->json([
+                "message" => "msg null",
+                "ticket_number" => "null",
+                "reply" => ""
+            ]);
         }
     }
     
 }
+
