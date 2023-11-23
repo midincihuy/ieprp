@@ -49,22 +49,22 @@ class HomeController extends Controller
         $data['diff_avg_pic_end_time'] = "-00:00:03";
         $data['current_open_ticket'] = Ticket::whereYear('start_time', $year)->whereMonth('start_time', $month)->whereStatus('Open')->count();
 
-        $pic_labels = Ticket::whereYear('start_time', $year)->whereMonth('start_time', $month)->select('pic')->groupBy('pic')->get()->pluck('pic')->toArray();
-        $pic_count = Ticket::whereYear('start_time', $year)->whereMonth('start_time', $month)->select(DB::raw('count(id) as tot_pic'))->groupBy('pic')->get()->pluck('tot_pic')->toArray();
+        $pic_labels = Ticket::whereYear('start_time', $year)->select('pic')->groupBy('pic')->get()->pluck('pic')->toArray();
+        $pic_count = Ticket::whereYear('start_time', $year)->select(DB::raw('count(id) as tot_pic'))->groupBy('pic')->get()->pluck('tot_pic')->toArray();
 
         $data['pic_count'] = [
             "labels" => $pic_labels,
             "value" => $pic_count
         ];
 
-        $rating_labels = Ticket::whereYear('start_time', $year)->whereMonth('start_time', $month)->select('rate')->groupBy('rate')->get()->pluck('rate')->toArray();
-        $rating_count = Ticket::whereYear('start_time', $year)->whereMonth('start_time', $month)->select(DB::raw('count(id) as tot_rate'))->groupBy('rate')->get()->pluck('tot_rate')->toArray();
+        $rating_labels = Ticket::whereYear('start_time', $year)->select('rate')->groupBy('rate')->get()->pluck('rate')->toArray();
+        $rating_count = Ticket::whereYear('start_time', $year)->select(DB::raw('count(id) as tot_rate'))->groupBy('rate')->get()->pluck('tot_rate')->toArray();
 
         $data['rating_count'] = [
             "labels" => $rating_labels,
             "value" => $rating_count
         ];
-        $category_labels = Ticket::whereYear('start_time', $year)->whereMonth('start_time', $month)->select('category')->groupBy('category')->pluck('category')->toArray();
+        $category_labels = Ticket::whereYear('start_time', $year)->select('category')->groupBy('category')->pluck('category')->toArray();
 
         $ticket_per_category  = [];
         // \Log::info($category_labels);
@@ -132,7 +132,7 @@ class HomeController extends Controller
         $months = Ticket::whereYear('start_time', $year)->whereNotNull('end_time')->select(DB::raw('month(start_time) as m'))->groupBy(DB::raw('month(start_time)'))->get();
         $arr_duration = [];
         foreach($months as $m){
-            $this_month = Ticket::whereYear('start_time', $year)->whereMonth('start_time', $m->m)->get();
+            $this_month = Ticket::whereYear('start_time', $year)->get();
             foreach($this_month as $data){
                 $month = $m->m - 1;
                 $arr_duration[$month][] = $data->duration_start_end;
@@ -162,7 +162,7 @@ class HomeController extends Controller
         $months = Ticket::whereYear('start_time', $year)->whereNotNull('end_time')->select(DB::raw('month(start_time) as m'))->groupBy(DB::raw('month(start_time)'))->get();
         $arr_duration = [];
         foreach($months as $m){
-            $this_month = Ticket::whereYear('start_time', $year)->whereMonth('start_time', $m->m)->get();
+            $this_month = Ticket::whereYear('start_time', $year)->get();
             foreach($this_month as $data){
                 $month = $m->m - 1;
                 $arr_duration[$month][] = $data->duration_start_end;
@@ -192,7 +192,7 @@ class HomeController extends Controller
         $months = Ticket::whereYear('start_time', $year)->whereNotNull('end_time')->select(DB::raw('month(start_time) as m'))->groupBy(DB::raw('month(start_time)'))->get();
         $arr_duration = [];
         foreach($months as $m){
-            $this_month = Ticket::whereYear('start_time', $year)->whereMonth('start_time', $m->m)->get();
+            $this_month = Ticket::whereYear('start_time', $year)->get();
             foreach($this_month as $data){
                 $month = $m->m - 1;
                 $arr_duration[$month][] = $data->duration_start_end;
