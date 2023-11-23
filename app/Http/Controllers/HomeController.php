@@ -33,13 +33,13 @@ class HomeController extends Controller
         $current_ticket = Ticket::whereYear('start_time', $year)->whereMonth('start_time', $month)->whereNotNull('end_time')->count();
 
         $total_duration_start_end = Ticket::whereYear('start_time', $year)->whereMonth('start_time', $month)->whereNotNull('end_time')->get()->sum('duration_start_end');
-        $avg_start_end = CEIL($total_duration_start_end/$current_ticket);
+        $avg_start_end = $current_ticket > 0 ? CEIL($total_duration_start_end/$current_ticket) : 0;
 
         $total_duration_start_pic = Ticket::whereYear('start_time', $year)->whereMonth('start_time', $month)->whereNotNull('end_time')->get()->sum('duration_start_pic');
-        $avg_start_pic = CEIL($total_duration_start_pic/$current_ticket);
+        $avg_start_pic = $current_ticket > 0 ? CEIL($total_duration_start_pic/$current_ticket) : 0;
 
         $total_duration_pic_end = Ticket::whereYear('start_time', $year)->whereMonth('start_time', $month)->whereNotNull('end_time')->get()->sum('duration_pic_end');
-        $avg_pic_end = CEIL($total_duration_pic_end/$current_ticket);
+        $avg_pic_end = $current_ticket > 0 ? CEIL($total_duration_pic_end/$current_ticket) : 0;
 
         $data['avg_start_end_time'] = gmdate("H:i:s", $avg_start_end);
         $data['diff_avg_start_end_time'] = "+00:00:03";
