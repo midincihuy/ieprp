@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Models\Reference;
+
 class ConfigurationController extends Controller
 {
     /**
@@ -12,7 +14,15 @@ class ConfigurationController extends Controller
      */
     public function index()
     {
-        return view('admin.maps.index');
+        $data = [];
+
+        $data['end_keyword'] = Reference::where('code', 'end')->get()->first()->value;
+        $data['rate_keyword'] = Reference::where('code', 'rate')->get()->first()->value;
+        $data['list_category'] = Reference::where('code', 'category')->get();
+        $data['list_rating'] = Reference::where('code', 'rating')->get();
+        $data['list_pic'] = Reference::where('code', 'pic')->get();
+        // \Log::info($data);
+        return view('admin.configuration.index', compact('data'));
     }
 
     /**
