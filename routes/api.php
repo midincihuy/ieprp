@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\TicketController;
 
 use App\Http\Controllers\API\HelpwaController;
+use App\Http\Controllers\API\ConfigurationController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -26,3 +27,6 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::post('helpwaresp', [HelpwaController::class, 'response']);
     Route::post('helpwarate', [HelpwaController::class, 'rate']);
 });
+
+Route::post('saveConfig', [ConfigurationController::class, 'saveConfig']);
+Route::post('saveConfigValue', [ConfigurationController::class, 'saveConfigValue']);

@@ -142,7 +142,7 @@ class HelpwaController extends BaseController
 
         $phone_number = explode("@", $request->phone_number);
         $check = Ticket::where(['phone_number' => $phone_number[0], 'status' => 'Open'])->get();
-        
+        if($check->count )
         switch ($request->type) {
             case "all" : 
                 // Check all posibility : end / pic / rate from message
@@ -166,7 +166,7 @@ class HelpwaController extends BaseController
                     
                     case "pic" :                
                         $update = $check->first();
-                        $arr_pic = explode($ref->first()->item, $request->message);
+                        $arr_pic = explode(Reference::whereCode("pic_keyword")->get()->first()->value, $request->message);
                         $pic = $arr_pic[1];
                         $update->pic = $pic;
                         $update->pic_time = date("Y-m-d H:i:s");
@@ -248,7 +248,7 @@ class HelpwaController extends BaseController
     }
 
     public function rate(Request $request){
-        \Log::info($request->message);
+        \Log::info($request);
         // Check phone number and status Open ticket exist
 
         $result = [];
@@ -271,7 +271,7 @@ class HelpwaController extends BaseController
             'status' => 'Open', 
             "ticket_number" => $ticket_number])
             ->get();
-        if($check->count() == 1){
+        if($check->count() == 1 && (count($result) > 0)){
             switch ($request->type) {
                 case "rate" :
                     $rate_type = Reference::whereItem($poll_name)->get();

@@ -17,9 +17,21 @@ class ConfigurationController extends Controller
         $data = [];
 
         $data['end_keyword'] = Reference::where('code', 'end')->get()->first()->value;
-        $data['rate_keyword'] = Reference::where('code', 'rate')->get()->first()->value;
+        $data['end_keyword_id'] = Reference::where('code', 'end')->get()->first()->id;
+
+        // $data['rate_keyword'] = Reference::where('code', 'rate')->get()->first()->value;
+        // $data['rate_keyword_id'] = Reference::where('code', 'rate')->get()->first()->id;
+
+        $data['category_keyword'] = Reference::where('code', 'cat')->get()->first()->value;
+        $data['category_keyword_id'] = Reference::where('code', 'cat')->get()->first()->id;
         $data['list_category'] = Reference::where('code', 'category')->get();
+
+        $data['rating_keyword'] = Reference::where('code', 'rate')->get()->first()->value;
+        $data['rating_keyword_id'] = Reference::where('code', 'rate')->get()->first()->id;
         $data['list_rating'] = Reference::where('code', 'rating')->get();
+
+        $data['pic_keyword'] = Reference::where('code', 'pic_keyword')->get()->first()->value;
+        $data['pic_keyword_id'] = Reference::where('code', 'pic_keyword')->get()->first()->id;
         $data['list_pic'] = Reference::where('code', 'pic')->get();
         // \Log::info($data);
         return view('admin.configuration.index', compact('data'));
