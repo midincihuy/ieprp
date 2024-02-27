@@ -100,7 +100,7 @@ class HelpwaController extends BaseController
         $rating = Reference::where('code', 'CATEGORY')->get();
         $response = "";
         if($rating->count() > 0){
-            $poll_name = $ticket_number."|\n".$rating->first()->item;
+            $poll_name = "Hi! Selamat datang di Contact Center IT Helpdesk\n\nIni adalah nomor ticket anda \n|".$ticket_number."|\n\n".$rating->first()->item;
             $poll_values = $rating->pluck('value')->toArray();
             $response = [
                 'message' => [
@@ -113,6 +113,7 @@ class HelpwaController extends BaseController
                 'to' => $phone_number[0],
             ];
         }
+        \Log::info("response : ".json_encode($response));
         return $response;        
     }
     
@@ -122,6 +123,7 @@ class HelpwaController extends BaseController
         $rating = Reference::where('code', 'CATEGORY')->get();
         if($rating->count() > 0){
             $poll_name = $ticket_number."|\n".$rating->first()->item;
+            $poll_name = "Hi! Selamat datang di Contact Center IT Helpdesk\n\nIni adalah nomor ticket anda \n|".$ticket_number."|\n\n".$rating->first()->item;
             $poll_values = $rating->pluck('value')->toArray();
             $response = Http::post(config('helpwa.sendwa'), [
                 'message' => [
@@ -142,108 +144,111 @@ class HelpwaController extends BaseController
 
         $phone_number = explode("@", $request->phone_number);
         $check = Ticket::where(['phone_number' => $phone_number[0], 'status' => 'Open'])->get();
-        if($check->count )
-        switch ($request->type) {
-            case "all" : 
-                // Check all posibility : end / pic / rate from message
-                $keyword = "";
-                $ref = Reference::whereValue($request->message)->get();
-                if($ref->count() == 1){
-                    $keyword = $ref->first()->code;
-                }
-                switch($keyword){
-                    case "end" :
-                        $update = $check->first();
-                        $update->end_time = date("Y-m-d H:i:s", $request->end_time);
-                        $update->status = "Close";
-                        $update->save();
-                        return response()->json([
-                            "message" => "Successfully End Ticket",
-                            "ticket_number" => $update->ticket_number,
-                            "reply" => ""
-                        ]);
-                        break;  
-                    
-                    case "pic" :                
-                        $update = $check->first();
-                        $arr_pic = explode(Reference::whereCode("pic_keyword")->get()->first()->value, $request->message);
-                        $pic = $arr_pic[1];
-                        $update->pic = $pic;
-                        $update->pic_time = date("Y-m-d H:i:s");
-                        $update->save();
-                        return response()->json([
-                            "message" => "Successfully Set PIC Ticket",
-                            "ticket_number" => $update->ticket_number,
-                            "reply" => ""
-                        ]);
-                        break;
+        if($check->count() == 1 ){
+            switch ($request->type) {
+                case "all" : 
+                    // Check all posibility : end / pic / rate from message
+                    $keyword = "";
+                    $ref = Reference::whereValue($request->message)->get();
+                    if($ref->count() == 1){
+                        $keyword = $ref->first()->code;
+                    }
+                    switch($keyword){
+                        case "end" :
+                            $update = $check->first();
+                            $update->end_time = date("Y-m-d H:i:s", $request->end_time);
+                            $update->status = "Close";
+                            $update->save();
+                            return response()->json([
+                                "message" => "Successfully End Ticket",
+                                "ticket_number" => $update->ticket_number,
+                                "reply" => ""
+                            ]);
+                            break;  
                         
-                    case "rate" :         
-                        // Send Poll Message
-                        $rating = Reference::where('code', 'RATING')->get();
-                        if($rating->count() > 0){
-                            $poll_name = $check->first()->ticket_number."|\n".$rating->first()->item;
-                            $poll_values = $rating->pluck('value')->toArray();
-                            $response = [
-                                'message' => [
-                                    'poll' => [
-                                        'name' => $poll_name,
-                                        "values" => $poll_values,
-                                        "selectableCount" => 1
-                                    ]
-                                ],
-                                'to' => $phone_number[0],
-                            ];
+                        case "pic" :                
+                            $update = $check->first();
+                            $arr_pic = explode(Reference::whereCode("pic_keyword")->get()->first()->value, $request->message);
+                            $pic = $arr_pic[1];
+                            $update->pic = $pic;
+                            $update->pic_time = date("Y-m-d H:i:s");
+                            $update->save();
+                            return response()->json([
+                                "message" => "Successfully Set PIC Ticket",
+                                "ticket_number" => $update->ticket_number,
+                                "reply" => ""
+                            ]);
+                            break;
+                            
+                        case "rate" :         
+                            // Send Poll Message
+                            $rating = Reference::where('code', 'RATING')->get();
+                            if($rating->count() > 0){
+                                // $poll_name = $check->first()->ticket_number."|\n".$rating->first()->item;
+                                $poll_name = "TICKET : |".$check->first()->ticket_number."|\n\n".$rating->first()->item;
+                                $poll_values = $rating->pluck('value')->toArray();
+                                $response = [
+                                    'message' => [
+                                        'poll' => [
+                                            'name' => $poll_name,
+                                            "values" => $poll_values,
+                                            "selectableCount" => 1
+                                        ]
+                                    ],
+                                    'to' => $phone_number[0],
+                                ];
 
+                                return response()->json([
+                                    "message" => "Successfully Send Rate Polling",
+                                    "ticket_number" => $check->first()->ticket_number,
+                                    "reply" => $response
+                                ]);
+                            }
+                            break;
+                            
+                        case "cat" :         
+                            // Send Category Message
+                            $rating = Reference::where('code', 'CATEGORY')->get();
+                            if($rating->count() > 0){
+                                // $poll_name = $check->first()->ticket_number."|\n".$rating->first()->item;
+                                $poll_name = "Hi! Selamat datang di Contact Center IT Helpdesk\n\nIni adalah nomor ticket anda \n|".$check->first()->ticket_number."|\n\n".$rating->first()->item;
+                                $poll_values = $rating->pluck('value')->toArray();
+                                $response = [
+                                    'message' => [
+                                        'poll' => [
+                                            'name' => $poll_name,
+                                            "values" => $poll_values,
+                                            "selectableCount" => 1
+                                        ]
+                                    ],
+                                    'to' => $phone_number[0],
+                                ];
+                                return response()->json([
+                                    "message" => "Successfully Send Category Polling",
+                                    "ticket_number" => $check->first()->ticket_number,
+                                    "reply" => $response
+                                ]);
+                            }
+                            break;
+                        default : 
+                            \Log::info("NO Keyword detected, msg : ".json_encode($request->message));
                             return response()->json([
-                                "message" => "Successfully Send Rate Polling",
-                                "ticket_number" => $check->first()->ticket_number,
-                                "reply" => $response
+                                "message" => "msg null",
+                                "ticket_number" => "null",
+                                "reply" => ""
                             ]);
-                        }
-                        break;
-                        
-                    case "cat" :         
-                        // Send Category Message
-                        $rating = Reference::where('code', 'CATEGORY')->get();
-                        if($rating->count() > 0){
-                            $poll_name = $check->first()->ticket_number."|\n".$rating->first()->item;
-                            $poll_values = $rating->pluck('value')->toArray();
-                            $response = [
-                                'message' => [
-                                    'poll' => [
-                                        'name' => $poll_name,
-                                        "values" => $poll_values,
-                                        "selectableCount" => 1
-                                    ]
-                                ],
-                                'to' => $phone_number[0],
-                            ];
-                            return response()->json([
-                                "message" => "Successfully Send Category Polling",
-                                "ticket_number" => $check->first()->ticket_number,
-                                "reply" => $response
-                            ]);
-                        }
-                        break;
-                    default : 
-                        \Log::info("NO Keyword detected, msg : ".json_encode($request->message));
-                        return response()->json([
-                            "message" => "msg null",
-                            "ticket_number" => "null",
-                            "reply" => ""
-                        ]);
-                        break;
-                }
-                break;
-            default:
-                # code...
-                return response()->json([
-                    "message" => "msg null",
-                    "ticket_number" => "null",
-                    "reply" => ""
-                ]);
-                break;
+                            break;
+                    }
+                    break;
+                default:
+                    # code...
+                    return response()->json([
+                        "message" => "msg null",
+                        "ticket_number" => "null",
+                        "reply" => ""
+                    ]);
+                    break;
+            }
         }
     }
 
