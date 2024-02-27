@@ -268,8 +268,8 @@ class HelpwaController extends BaseController
         $phone_number = explode("@", $request->phone_number);
         $poll_name = $request->poll_name;
         $arr_ticket = explode("|", $poll_name);
-        $ticket_number = $arr_ticket[0];
-        $poll_name = trim($arr_ticket[1]);
+        $ticket_number = $arr_ticket[1];
+        $poll_name = trim($arr_ticket[2]);
         \Log::info(json_encode($poll_name));
         $check = Ticket::where([
             'phone_number' => $phone_number[0], 
