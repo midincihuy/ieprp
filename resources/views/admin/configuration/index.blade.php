@@ -169,6 +169,7 @@ $(document).ready(function(){
                 },
                 'success' : function(res){
                     alert(res.msg);
+                    location.reload();
                 }
             });
     });
@@ -185,6 +186,7 @@ $(document).ready(function(){
                 },
                 'success' : function(res){
                     alert(res.msg);
+                    location.reload();
                 }
             });
     });
@@ -201,6 +203,7 @@ $(document).ready(function(){
                 },
                 'success' : function(res){
                     alert(res.msg);
+                    location.reload();
                 }
             });
     });
@@ -217,6 +220,7 @@ $(document).ready(function(){
                 },
                 'success' : function(res){
                     alert(res.msg);
+                    location.reload();
                 }
             });
     });
@@ -238,6 +242,7 @@ $(document).ready(function(){
                 },
                 'success' : function(res){
                     alert(res.msg);
+                    location.reload();
                 }
             });
     });
@@ -258,6 +263,7 @@ $(document).ready(function(){
                 },
                 'success' : function(res){
                     alert(res.msg);
+                    location.reload();
                 }
             });
     });
@@ -278,6 +284,7 @@ $(document).ready(function(){
                 },
                 'success' : function(res){
                     alert(res.msg);
+                    location.reload();
                 }
             });
     });

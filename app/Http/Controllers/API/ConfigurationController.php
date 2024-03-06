@@ -32,16 +32,26 @@ class ConfigurationController extends BaseController
             $id = $split[2];
             if($id != "new"){
                 $reference = Reference::findOrFail($id);
-                $reference->value = $value;
-                $reference->save();
+                \Log::info($value);
+                if(trim($value) != ""){
+                    \Log::info("masuk update");
+                    $reference->value = $value;
+                    $reference->save();
+                }else{
+                    \Log::info("masuk delete");
+                    $reference->delete();
+                }
             }else{
-                $sort = $count;
-                $reference = new Reference();
-                $reference->code = $split[1];
-                $reference->item = $value;
-                $reference->value = $value;
-                $reference->sort = $sort;
-                $reference->save();
+                \Log::info("masuk new");
+                if(trim($value) != ""){
+                    $sort = $count;
+                    $reference = new Reference();
+                    $reference->code = $split[1];
+                    $reference->item = $value;
+                    $reference->value = $value;
+                    $reference->sort = $sort;
+                    $reference->save();
+                }
             }
         }
         /*
