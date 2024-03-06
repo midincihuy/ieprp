@@ -11,8 +11,9 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
-
 use Carbon\Carbon;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
+
 class TicketsExport implements FromQuery, Responsable, WithHeadings, ShouldAutoSize, withMapping, WithColumnFormatting
 {
     use Exportable;
@@ -52,6 +53,9 @@ class TicketsExport implements FromQuery, Responsable, WithHeadings, ShouldAutoS
     {
         $start_time = Carbon::parse($ticket->start_time);
         $end_time = Carbon::parse($ticket->end_time);
+        $pic_time = Carbon::parse($ticket->pic_time);
+        $created_at = Carbon::parse($ticket->created_at);
+        $updated_at = Carbon::parse($ticket->updated_at);
         $duration = "";
         if(isset($ticket->end_time)){
             $duration = gmdate("H:i:s", $start_time->diffInSeconds($end_time));
@@ -59,27 +63,31 @@ class TicketsExport implements FromQuery, Responsable, WithHeadings, ShouldAutoS
         return [
             $ticket->msg_id,
             $ticket->ticket_number,
-            "'".$ticket->phone_number,
+            $ticket->phone_number,
             $ticket->push_name,
-            $ticket->start_time,
-            $ticket->end_time,
+            Date::dateTimeToExcel($start_time),
+            Date::dateTimeToExcel($end_time),
             $duration,
             $ticket->status,
             $ticket->pic,
-            $ticket->pic_time,
+            Date::dateTimeToExcel($pic_time),
             $ticket->rate,
             $ticket->category,
-            $ticket->created_at,
-            $ticket->updated_at,
+            Date::dateTimeToExcel($created_at),
+            Date::dateTimeToExcel($updated_at),
         ];
     }
 
     public function columnFormats(): array
     {
         return [
+            'C' => "#0",
+            'E' => NumberFormat::FORMAT_DATE_DDMMYYYY,
+            'F' => NumberFormat::FORMAT_DATE_DDMMYYYY,
             'G' => NumberFormat::FORMAT_DATE_TIME4,
-            'M' => NumberFormat::FORMAT_DATE_DATETIME,
-            'N' => NumberFormat::FORMAT_DATE_DATETIME,
+            'J' => NumberFormat::FORMAT_DATE_DDMMYYYY,
+            'M' => NumberFormat::FORMAT_DATE_DDMMYYYY,
+            'N' => NumberFormat::FORMAT_DATE_DDMMYYYY,
         ];
     }
 }
