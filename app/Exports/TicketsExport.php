@@ -70,7 +70,7 @@ class TicketsExport implements FromQuery, Responsable, WithHeadings, ShouldAutoS
             $duration,
             $ticket->status,
             $ticket->pic,
-            Date::dateTimeToExcel($pic_time),
+            isset($ticket->pic_time) ? Date::dateTimeToExcel($pic_time) : "",
             $ticket->rate,
             $ticket->category,
             Date::dateTimeToExcel($created_at),
