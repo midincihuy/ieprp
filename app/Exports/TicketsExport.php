@@ -52,12 +52,12 @@ class TicketsExport implements FromQuery, Responsable, WithHeadings, ShouldAutoS
     public function map($ticket): array
     {
         $start_time = Carbon::parse($ticket->start_time);
-        $end_time = Carbon::parse($ticket->end_time);
         $pic_time = Carbon::parse($ticket->pic_time);
         $created_at = Carbon::parse($ticket->created_at);
         $updated_at = Carbon::parse($ticket->updated_at);
         $duration = "";
         if(isset($ticket->end_time)){
+            $end_time = Carbon::parse($ticket->end_time);
             $duration = gmdate("H:i:s", $start_time->diffInSeconds($end_time));
         }
         return [
@@ -66,7 +66,7 @@ class TicketsExport implements FromQuery, Responsable, WithHeadings, ShouldAutoS
             $ticket->phone_number,
             $ticket->push_name,
             Date::dateTimeToExcel($start_time),
-            Date::dateTimeToExcel($end_time),
+            isset($ticket->end_time) ? Date::dateTimeToExcel($end_time) : "",
             $duration,
             $ticket->status,
             $ticket->pic,
