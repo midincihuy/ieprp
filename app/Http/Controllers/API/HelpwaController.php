@@ -273,9 +273,10 @@ class HelpwaController extends BaseController
         \Log::info(json_encode($poll_name));
         $check = Ticket::where([
             'phone_number' => $phone_number[0], 
-            'status' => 'Open', 
+            // 'status' => 'Open', 
             "ticket_number" => $ticket_number])
             ->get();
+            \Log::info($check);
         if($check->count() == 1 && (count($result) > 0)){
             switch ($request->type) {
                 case "rate" :
@@ -285,12 +286,16 @@ class HelpwaController extends BaseController
                         switch($type){
                             case "RATING":
                                 $update = $check->first();
-                                $update->rate = $result[$request->phone_number];
+                                if($update->rate == null){
+                                    $update->rate = $result[$request->phone_number];
+                                }
                                 $update->save();
                                 break;
                             case "CATEGORY":
                                 $update = $check->first();
-                                $update->category = $result[$request->phone_number];
+                                if($update->category == null){
+                                    $update->category = $result[$request->phone_number];
+                                }
                                 $update->save();
                         }
                     }
