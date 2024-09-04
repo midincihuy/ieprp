@@ -148,6 +148,35 @@
                 </div>
             </div>
         </div>
+        <div class="col-xl-12 col-xxl-12 d-flex">
+            <div class="w-100">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col mt-0">
+                                        <h5 class="card-title">Password WiFi</h5>
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="stat text-primary">
+                                            <i class="align-middle" data-feather="user"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <input type="hidden" class="form-control" name="password_wifi_id" value="{{ $data['password_wifi_id'] }}" id="password_wifi_id">
+                                        <textarea rows=10 class="form-control" name="password_wifi" value="" id="password_wifi">{{ $data['password_wifi'] }}</textarea>
+                                        <input type="button" name="edit_password_wifi" id="edit_password_wifi" value="Edit Password WiFi" class="btn btn-primary">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 @stop
@@ -281,6 +310,25 @@ $(document).ready(function(){
                 'dataType' : 'json',
                 'data' : {
                     serializedData
+                },
+                'success' : function(res){
+                    alert(res.msg);
+                    location.reload();
+                }
+            });
+    });
+
+    
+    $("#edit_password_wifi").on("click", function(){
+        var value = $("textarea[name='password_wifi']").val();
+        var id = $("input[name='password_wifi_id']").val();
+        $.ajax({
+                'url' : '/api/saveConfig',
+                'type' : 'POST',
+                'dataType' : 'json',
+                'data' : {
+                    "value" : value,
+                    "id" : id
                 },
                 'success' : function(res){
                     alert(res.msg);

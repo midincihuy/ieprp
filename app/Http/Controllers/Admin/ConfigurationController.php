@@ -33,6 +33,8 @@ class ConfigurationController extends Controller
         $data['pic_keyword'] = Reference::where('code', 'pic_keyword')->get()->first()->value;
         $data['pic_keyword_id'] = Reference::where('code', 'pic_keyword')->get()->first()->id;
         $data['list_pic'] = Reference::where('code', 'pic')->get();
+        $data['password_wifi'] = Reference::where('code', 'password_wifi')->get()->first()->value;
+        $data['password_wifi_id'] = Reference::where('code', 'password_wifi')->get()->first()->id;
         // \Log::info($data);
         return view('admin.configuration.index', compact('data'));
     }

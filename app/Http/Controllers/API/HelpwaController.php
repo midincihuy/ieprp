@@ -297,6 +297,21 @@ class HelpwaController extends BaseController
                                     $update->category = $result[$request->phone_number];
                                 }
                                 $update->save();
+                                $item_password_wifi = Reference::whereCode('password_wifi')->get()->first()->item;
+                                if($result[$request->phone_number] == $item_password_wifi){ //Login Access EMTEK-GROUP-GUEST
+                                    $text = Reference::whereCode('password_wifi')->get()->first()->value;
+                                    $response = [
+                                        'message' => [
+                                            'text' => $text
+                                        ],
+                                        'to' => $phone_number[0],
+                                    ];
+                                    return response()->json([
+                                        "message" => "Select Login Access EMTEK-GROUP-GUEST",
+                                        "ticket_number" => $ticket_number,
+                                        "reply" => $response
+                                    ]);
+                                }
                         }
                     }
                     break;
